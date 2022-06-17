@@ -1,0 +1,69 @@
+---
+title: "How about the sales volume of action and shooter game for X360 and PS3? "
+author: "Jia Jing Liew"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+```{r, include = TRUE}
+Sys.setenv(LANG="en")
+setwd("~/Project 01")
+library(ggplot2)
+library(tidyverse)
+library(dplyr)
+library(ggpubr)
+vg<-read.csv("vgsales.csv")
+vg<-dplyr::filter(vg,!is.na(Year))
+```
+
+### Now, making subsets and plotting the bargraph
+```{r, echo = FALSE}
+vgX360Action<-subset(vg, Platform=="X360" & Genre=="Action" & Year<="2016" & Year>"2005")
+g1<-ggplot(vgX360Action, aes(x=Year,y=Global_Sales))+geom_bar(stat='identity',color='lightblue')+labs(x='Year',y='Sales',title="Sales Volume of Action Game", tag="X360")+theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, size = 12),axis.text.y = element_text(vjust = 1, hjust = 1, size = 12))+geom_text(aes(x=1,y=40),label=sum(vgX360Action$Global_Sales))
+vgX360Shooter<-subset(vg, Platform=="X360" & Genre=="Shooter" & Year<="2016" & Year>"2005")
+g2<-ggplot(vgX360Shooter, aes(x=Year, y=Global_Sales))+geom_bar(stat='identity',color='lightgreen')+labs(x='Year',y='Sales',title="Sales Volume of Shooter Game", tag="X360")+theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, size = 12),axis.text.y = element_text(vjust = 1, hjust = 1, size = 12))+geom_text(aes(x=1,y=40),label=sum(vgX360Shooter$Global_Sales))
+ggarrange(g1,g2,nrow=2,ncol=1)
+```
+
+In here, i will discuss two kind of platforms X360 and PS3. Why I choose PS3 and X360? Because the epidemic period of them is very close, almost same.
+```{r, echo = FALSE}
+vgPS3Action<-subset(vg, Platform=="PS3" & Genre=="Action" & Year<="2016" & Year>"2005")
+g3<-ggplot(vgPS3Action, aes(x=Year,y=Global_Sales))+geom_bar(stat='identity',color='blue')+labs(x='Year',y='Sales',title="Sales Volume of Action Game", tag="PS3")+theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, size = 12),axis.text.y = element_text(vjust = 1, hjust = 1, size = 12))+geom_text(aes(x=1,y=40),label=sum(vgPS3Action$Global_Sales))
+vgPS3Shooter<-subset(vg, Platform=="PS3" & Genre=="Shooter" & Year<="2016" & Year>"2005")
+g4<-ggplot(vgPS3Shooter, aes(x=Year, y=Global_Sales))+geom_bar(stat='identity',color='green')+labs(x='Year',y='Sales',title="Sales Volume of Shooter Game", tag="PS3")+theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, size = 12),axis.text.y = element_text(vjust = 1, hjust = 1, size = 12))+geom_text(aes(x=1,y=40),label=sum(vgPS3Shooter$Global_Sales))
+ggarrange(g3,g4,nrow=2,ncol=1)
+```
+
+From the above barplots, have two phenomenons happened, the first is the total sales volume of X360 higher than PS3. The reason may be following two points, X360 has higher host performance than PS3 and the controller of X360 is easilier control than PS3, it can play both type of games easily. The second is the action game sales volume of the PS3 is the most sales volume. This is possible because some of action games are having more interesting story and using controller easily, certainly, has a few factor that have some games are sequel, such as "God Of Wars 3", "Metal Gear Solid 4", etc. This games have been collecting few of fans.
+
+### For the PS2 case
+```{r, echo = FALSE}
+vgPS2Action<-subset(vg, Platform=="PS2" & Genre=="Action" & Year<="2016")
+vgPS2Shooter<-subset(vg, Platform=="PS2" & Genre=="Shooter" & Year<="2016")
+p1<-ggplot(vgPS2Action, aes(x=Year, y=Global_Sales))+geom_bar(stat='identity',color='lightblue')+labs(x='Year',y='Sales',title="Sales Volume of Action Game")+theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, size = 12),axis.text.y = element_text(vjust = 1, hjust = 1, size = 12))+geom_text(aes(x=1,y=40),label=sum(vgPS2Action$Global_Sales))
+p2<-ggplot(vgPS2Shooter, aes(x=Year, y=Global_Sales))+geom_bar(stat='identity',color='lightgreen')+theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, size = 12),axis.text.y = element_text(vjust = 1, hjust = 1, size = 12))+labs(x='Year',y='Sales',title="Sales Volume of Shooter Game")+geom_text(aes(x=1,y=40),label=sum(vgPS2Shooter$Global_Sales))
+
+ggarrange(p1,p2,nrow=2,ncol=1)
+
+```
+
+There has same happening was occurred.
+
+### In generality, what had happened about the sales volume of action and shooter game at time period 2001 to 2016?
+```{r, echo = FALSE}
+vgAction<-subset(vg, Year>="2001" & Genre=="Action" & Year<="2016")
+vgShooter<-subset(vg, Year>="2001" & Genre=="Shooter" & Year<="2016")
+p1<-ggplot(vgAction, aes(x=Year, y=Global_Sales))+geom_bar(stat='identity',color='lightblue')+labs(x='Year',y='Sales',title="Sales Volume of Action Game")+theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, size = 12),axis.text.y = element_text(vjust = 1, hjust = 1, size = 12))+geom_text(aes(x=1,y=150),label=sum(vgAction$Global_Sales))
+p2<-ggplot(vgShooter, aes(x=Year, y=Global_Sales))+geom_bar(stat='identity',color='lightgreen')+theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, size = 12),axis.text.y = element_text(vjust = 1, hjust = 1, size = 12))+labs(x='Year',y='Sales',title="Sales Volume of Shooter Game")+geom_text(aes(x=1,y=100),label=sum(vgShooter$Global_Sales))
+
+ggarrange(p1,p2,nrow=2,ncol=1)
+
+max(vgAction$Global_Sales); max(vgShooter$Global_Sales)
+```
+
+For the graphs, we also can see the the phenomenon has happened, the reason of causing this may be action game is easily control for playing, and the more action games have interesting and heroism story, it can be played with empathy, such as, when you play "God Of Wars", you know why the protagonist hate the gods, you need a little skills to control him, in
+my version.
